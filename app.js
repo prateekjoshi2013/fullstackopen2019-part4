@@ -5,10 +5,12 @@ const app = express()
 const cors = require('cors')
 const blogsRouter = require('./controllers/blogs')
 const bodyParser = require('body-parser')
-
+const {requestLogger,unknownEndpoint,errorHandler}=require('./utils/middleware')
 mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true })
 app.use(cors())
 app.use(bodyParser.json())
+app.use(requestLogger)
 app.use('/api/blogs', blogsRouter)
-
+app.use(unknownEndpoint)
+app.use(errorHandler)
 module.exports=app
